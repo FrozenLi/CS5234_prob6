@@ -1,8 +1,8 @@
 import math
 
 
-class hashFunction():
-    def __int__(self,a,b,p,M):
+class hashFunction:
+    def __init__(self,a,b,p,M):
         self.a=a
         self.b=b
         self.p=p
