@@ -5,7 +5,7 @@ import random
 from hashFunction import hashFunction
 import statistics
 import math
-import os
+import draw_bar
 
 
 def get_args():
@@ -13,6 +13,10 @@ def get_args():
     parser.add_argument('--algoType', type=str, default='1', help='Algorithm Type')
     parser.add_argument("--num_A", type=int, default=100, help="number of A")
     parser.add_argument("--num_B", type=int, default=200, help="number of B")
+    parser.add_argument("--data_generator",type=str,default="uniform_generator",help="enter the data generater, have 3 types"
+                                                                                     " -- uniform_generator|exponential_generator|real_world_data_generator ")
+    parser.add_argument("--real_world_data_input",type=str,default="",help="real world data location")
+
     args = parser.parse_args()
     return args
 
@@ -78,7 +82,7 @@ def count(args, inputstream, hashfunctions):
     return counter
 
 
-def uniform_generater(n, m):
+def uniform_generator(n, m):
     assert m < n
     inputstream = []
     for i in range(0, n):
@@ -86,7 +90,7 @@ def uniform_generater(n, m):
     return inputstream
 
 
-def exponential_generater(n, m):
+def exponential_generator(n, m):
     assert m < n
     inputstream = []
     stream_range = range(0, m)
@@ -98,7 +102,7 @@ def exponential_generater(n, m):
     return inputstream
 
 
-def real_world_data_generater(input_path):
+def real_world_data_generator(input_path):
     try:
         with open(input_path, 'r') as myfile:
             data = myfile.read().replace('\n', '')
@@ -111,13 +115,38 @@ def real_world_data_generater(input_path):
 
 if __name__ == "__main__":
     args = get_args()
-    inputstream = uniform_generater(100000, 100)
+    if args.data_generator == "uniform_generator":
+        inputstream = uniform_generator(100000, 100)
+    elif args.data_generator == "exponential_generator":
+        inputstream = exponential_generator(100000,100)
+    elif args.data_generator == "real_world_data_generator":
+        inputstream = real_world_data_generator(args.real_world_data_input)
+    else:
+        print ("Data generator type error")
+        exit(1)
     hashfunctions = hashFunctions(args)
     counter = count(args, inputstream, hashfunctions)
     unique_element_input_stream = set(inputstream)
+
+    algo1_query_result=[]
+    algo2_query_result=[]
+    algo1_diff=[]
+    algo2_diff=[]
+    actual_results=[]
+    labels=[]
     for element in unique_element_input_stream:
         algo1_query = algo1(args, counter, hashfunctions, element)
         algo2_query = algo2(args, counter, hashfunctions, element)
+        actual_result = inputstream.count(element)
         print("Element {}".format(element))
         print("algo 1 query result is {}".format(algo1_query))
         print("algo 2 query result is {}".format(algo2_query))
+        print("Actual result is {}".format(actual_result))
+        algo1_query_result.append(algo1_query)
+        algo2_query_result.append(algo2_query)
+        algo1_diff.append(math.fabs(algo1_query-actual_result))
+        algo2_diff.append(math.fabs(algo2_query-actual_result))
+        actual_results.append(actual_result)
+        labels.append(element)
+    draw_bar.draw_stats(algo1_query_result,algo2_query_result,actual_results,labels)
+    draw_bar.draw_diff(algo1_diff,algo2_diff,labels)
