@@ -154,7 +154,7 @@ if __name__ == "__main__":
         algo2_query_diff = math.fabs(algo2_query - actual_result)
         to_write = ",".join(
             [str(element), str(algo1_query), str(algo2_query), str(actual_result), str(algo1_query_diff),
-             str(algo2_query_diff)])
+             str(algo2_query_diff), '\n'])
         writer.write(to_write)
         algo1_query_result.append(algo1_query)
         algo2_query_result.append(algo2_query)
