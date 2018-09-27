@@ -19,7 +19,8 @@ class hashFunction:
             # Convert x to integer
             str_to_int = 0
             for i in range(0, len(x)):
-                str_to_int += x[i] * math.pow(31, len(x) - 1 - i)
+                str_to_int += ord(x[i]) * math.pow(31, len(x) - 1 - i)
+
             # Use hash function to hash integer
-            result = ((self.a * str_to_int + self.b) % self.p) % self.M
+            result = ((self.a * int(str_to_int) + self.b) % self.p) % self.M
         return result
