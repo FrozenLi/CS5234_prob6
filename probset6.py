@@ -4,6 +4,8 @@ import next_prime
 import random
 from hashFunction import hashFunction
 import statistics
+import math
+import os
 
 
 def get_args():
@@ -75,17 +77,41 @@ def count(args, inputstream, hashfunctions):
             counter[i][hashfunctions[i].hash(element)] += 1
     return counter
 
-def uniform_generater(n,m):
-    inputstream=[]
-    for i in range(0,n):
-        inputstream.append(random.randint(0,m-1))
+
+def uniform_generater(n, m):
+    assert m < n
+    inputstream = []
+    for i in range(0, n):
+        inputstream.append(random.randint(0, m - 1))
     return inputstream
 
+
+def exponential_generater(n, m):
+    assert m < n
+    inputstream = []
+    stream_range = range(0, m)
+    stream_probability = []
+    for i in range(0, m):
+        stream_probability.append(math.pow(1 / 2, i + 1))
+    for i in range(0, n):
+        inputstream.append(random.choices(stream_range, stream_probability))
+    return inputstream
+
+
+def real_world_data_generater(input_path):
+    try:
+        with open(input_path, 'r') as myfile:
+            data = myfile.read().replace('\n', '')
+    except:
+        raise ValueError('could not open {}'.format(input_path))
+        exit(1)
+    inputstream = data.split(" ")
+    return inputstream
 
 
 if __name__ == "__main__":
     args = get_args()
-    inputstream = uniform_generater(100000,100)
+    inputstream = uniform_generater(100000, 100)
     hashfunctions = hashFunctions(args)
     counter = count(args, inputstream, hashfunctions)
     unique_element_input_stream = set(inputstream)
