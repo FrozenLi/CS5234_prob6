@@ -12,8 +12,8 @@ from numpy import savetxt
 def get_args():
     parser = argparse.ArgumentParser()
     parser.add_argument('--algoType', type=str, default='1', help='Algorithm Type')
-    parser.add_argument("--num_A", type=int, default=100, help="number of A")
-    parser.add_argument("--num_B", type=int, default=200, help="number of B")
+    parser.add_argument("--num_A", type=int, default=9, help="number of A")
+    parser.add_argument("--num_B", type=int, default=20000000, help="number of B")
     parser.add_argument("--data_generator", type=str, default="uniform_generator",
                         help="enter the data generater, have 3 types"
                              " -- uniform_generator|exponential_generator|real_world_data_generator ")
@@ -104,8 +104,7 @@ def exponential_generator(n, m):
     stream_probability = []
     for i in range(0, m):
         stream_probability.append(math.pow(1 / 2, i + 1))
-    for i in range(0, n):
-        inputstream.append(random.choices(stream_range, stream_probability))
+    inputstream=random.choices(stream_range,stream_probability,k=n)
     return inputstream
 
 
@@ -123,9 +122,9 @@ def real_world_data_generator(input_path):
 if __name__ == "__main__":
     args = get_args()
     if args.data_generator == "uniform_generator":
-        inputstream = uniform_generator(100000, 100)
+        inputstream = uniform_generator(1000000, 1000)
     elif args.data_generator == "exponential_generator":
-        inputstream = exponential_generator(100000, 100)
+        inputstream = exponential_generator(1000000, 1000)
     elif args.data_generator == "real_world_data_generator":
         inputstream = real_world_data_generator(args.real_world_data_input)
     else:
