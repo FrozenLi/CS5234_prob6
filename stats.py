@@ -8,8 +8,8 @@ if __name__ == "__main__":
     with open(input_file,'r') as f:
         for row in f:
             temp=row.split(",")
-            algo1_error=math.fabs(float(temp[-2].strip()))
-            algo2_error=math.fabs(float(temp[-3].strip()))
+            algo1_error=math.fabs(float(temp[-3].strip()))
+            algo2_error=math.fabs(float(temp[-2].strip()))
             algo1_error_sum+=algo1_error
             algo2_error_sum+=algo2_error
     print("Algo 1 error is {}".format(algo1_error_sum))
