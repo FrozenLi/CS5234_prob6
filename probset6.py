@@ -5,6 +5,7 @@ import random
 from hashFunction import hashFunction
 import statistics
 import math
+from collections import Counter
 import draw_bar
 from numpy import savetxt
 
@@ -122,9 +123,9 @@ def real_world_data_generator(input_path):
 if __name__ == "__main__":
     args = get_args()
     if args.data_generator == "uniform_generator":
-        inputstream = uniform_generator(1000000, 1000)
+        inputstream = uniform_generator(1000000, 100000)
     elif args.data_generator == "exponential_generator":
-        inputstream = exponential_generator(1000000, 1000)
+        inputstream = exponential_generator(1000000, 100000)
     elif args.data_generator == "real_world_data_generator":
         inputstream = real_world_data_generator(args.real_world_data_input)
     else:
@@ -138,13 +139,14 @@ if __name__ == "__main__":
     algo2_query_result = []
     algo1_diff = []
     algo2_diff = []
-    actual_results = []
     labels = []
     writer = open(args.result_path, 'w')
+    #generate correct answer
+    actual_results=Counter(inputstream)
     for element in unique_element_input_stream:
         algo1_query = algo1(args, counter, hashfunctions, element)
         algo2_query = algo2(args, counter, hashfunctions, element)
-        actual_result = inputstream.count(element)
+        actual_result = actual_results[element]
         # print("Element {}".format(element))
         # print("algo 1 query result is {}".format(algo1_query))
         # print("algo 2 query result is {}".format(algo2_query))
@@ -155,12 +157,12 @@ if __name__ == "__main__":
             [str(element), str(algo1_query), str(algo2_query), str(actual_result), str(algo1_query_diff),
              str(algo2_query_diff), '\n'])
         writer.write(to_write)
-        algo1_query_result.append(algo1_query)
-        algo2_query_result.append(algo2_query)
-        algo1_diff.append(algo1_query_diff)
-        algo2_diff.append(algo2_query_diff)
-        actual_results.append(actual_result)
-        labels.append(element)
+        #algo1_query_result.append(algo1_query)
+        #algo2_query_result.append(algo2_query)
+        #algo1_diff.append(algo1_query_diff)
+        #algo2_diff.append(algo2_query_diff)
+        #actual_results.append(actual_result)
+        #labels.append(element)
     writer.close()
     # draw_bar.draw_stats(algo1_query_result,algo2_query_result,actual_results,labels)
     # draw_bar.draw_diff(algo1_diff,algo2_diff,labels)
