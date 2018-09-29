@@ -5,7 +5,7 @@ declare -a num_Bs
 python_script="./probset6.py"
 testNum=1
 num_As=(2 4 7 9)
-num_Bs=(20000000 200000 20000 2000)
+num_Bs=(2000000 200000 20000 2000)
 for num_A in ${num_As[@]}
 do
 for num_B in ${num_Bs[@]}
